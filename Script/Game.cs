@@ -22,7 +22,6 @@ public class Game : MonoBehaviour
     public Play_Tip play_tip;
     public Image img_p1_icon_home;
     public Image img_p2_icon_home;
-    public GameObject obj_button_remove_ads_home;
 
     [Header("Panel info")]
     public Text i_txt_level_info;
@@ -77,11 +76,6 @@ public class Game : MonoBehaviour
         this.carrot.Load_Carrot(this.check_exit_app);
         this.carrot.shop.onCarrotPaySuccess += this.carrot_by_success;
         this.play_tip.load_status();
-
-        if (this.carrot.ads.get_status_ads()) 
-            this.obj_button_remove_ads_home.SetActive(true);
-        else 
-            this.obj_button_remove_ads_home.SetActive(false);
 
         int index_skin = PlayerPrefs.GetInt("sel_skin", 0);
         this.change_skin_player(index_skin);
@@ -313,6 +307,7 @@ public class Game : MonoBehaviour
 
     public void btn_back_map_select()
     {
+        this.carrot.ads.create_banner_ads();
         this.map_one_player.gameObject.SetActive(true);
         this.panel_play_one.SetActive(false);
         this.panel_game_over.SetActive(false);
@@ -324,6 +319,7 @@ public class Game : MonoBehaviour
 
     public void select_map_level_player_one(Level_item lv)
     {
+        this.carrot.ads.Destroy_Banner_Ad();
         this.i_txt_level_info.text = lv.txt_level.text;
         this.i_txt_game_info.text = lv.row_tomato + " x " + lv.col_tomato;
         this.count_tomato_on = 0;

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class Game : MonoBehaviour
 {
     public Carrot.Carrot carrot;
+    public IronSourceAds ads;
     [Header("Obj Main")]
     public GameObject panel_start;
     public GameObject panel_play_one;
@@ -74,6 +75,12 @@ public class Game : MonoBehaviour
         this.panel_game_win.SetActive(false);
         this.game_two_player.panel_game_two_player.SetActive(false);
         this.carrot.Load_Carrot(this.check_exit_app);
+        this.ads.On_Load();
+
+        this.ads.onRewardedSuccess=this.carrot.game.OnRewardedSuccess;
+        this.carrot.act_buy_ads_success=this.ads.RemoveAds;
+        this.carrot.game.act_click_watch_ads_in_music_bk=this.ads.ShowRewardedVideo;
+
         this.carrot.shop.onCarrotPaySuccess += this.carrot_by_success;
         this.play_tip.load_status();
 
@@ -302,24 +309,24 @@ public class Game : MonoBehaviour
         this.game_two_player.panel_game_two_player.SetActive(false);
         this.game_two_player.stop_game();
         this.play_sound();
-        this.carrot.ads.show_ads_Interstitial();
+        this.ads.show_ads_Interstitial();
     }
 
     public void btn_back_map_select()
     {
-        this.carrot.ads.create_banner_ads();
+        this.ads.ShowBannerAd();
         this.map_one_player.gameObject.SetActive(true);
         this.panel_play_one.SetActive(false);
         this.panel_game_over.SetActive(false);
         this.panel_game_win.SetActive(false);
         this.play_sound();
         this.map_one_player.check_info_all_level();
-        this.carrot.ads.show_ads_Interstitial();
+        this.ads.show_ads_Interstitial();
     }
 
     public void select_map_level_player_one(Level_item lv)
     {
-        this.carrot.ads.Destroy_Banner_Ad();
+        this.ads.HideBannerAd();
         this.i_txt_level_info.text = lv.txt_level.text;
         this.i_txt_game_info.text = lv.row_tomato + " x " + lv.col_tomato;
         this.count_tomato_on = 0;
@@ -537,7 +544,7 @@ public class Game : MonoBehaviour
 
     public void btn_delete_all_data()
     {
-        this.carrot.delete_all_data();
+        this.carrot.Delete_all_data();
         this.carrot.delay_function(1f,this.Start);
         this.play_sound();
     }
@@ -546,7 +553,7 @@ public class Game : MonoBehaviour
     {
         if (s_id_product == this.carrot.shop.get_id_by_index(1))
         {
-            this.carrot.show_msg("Shop", "Successful item purchase! you can use!", Carrot.Msg_Icon.Success);
+            this.carrot.Show_msg("Shop", "Successful item purchase! you can use!", Carrot.Msg_Icon.Success);
             this.GetComponent<Game_shop>().buy_success_skin();
         }
     }
